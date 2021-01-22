@@ -29,8 +29,7 @@ public class Author {
 	public Author() {
 	}
 
-	public Author(int id, String firstName, String lastName, LocalDate birthDate) {
-		this.id = id;
+	public Author(String firstName, String lastName, LocalDate birthDate) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;

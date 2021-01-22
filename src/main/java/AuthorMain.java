@@ -5,25 +5,28 @@ public class AuthorMain {
 
 		AuthorDao authorDao = new AuthorDaoImpl();
 
-		// Insert new author
-		authorDao.create(new Author(0, "Bosse", "Andersson", LocalDate.of(1950, 5, 1)));
+		// Create authors
+		authorDao.create(new Author("Per Olov", "Enquist", LocalDate.of(1934, 7, 14)));
+		authorDao.create(new Author("Elof", "Enquist", LocalDate.of(1903, 2, 7)));
+		authorDao.create(new Author("Maja", "Enquist", LocalDate.of(1903, 1, 3)));
+		authorDao.create(new Author("Mats", "Enquist", LocalDate.of(1960, 12, 24)));
 
 		// Find author
-		System.out.println(authorDao.findByLastName("Andersson"));
+		System.out.println(authorDao.findByLastName("Enquist"));
 
 		// Rename author
-		authorDao.updateLastName(15, "Larsson");
-
-		// Verify rename
-		System.out.println(authorDao.findByLastName("Larsson"));
+		authorDao.updateLastName(12, "Lidman");
 
 		// Remove author
 		authorDao.remove(15);
 
 		// Find by birthdate, range
 		System.out.println(authorDao.findByBirthDate(
-				LocalDate.of(1901, 1, 1),
-				LocalDate.of(1999, 1, 12)));
+				LocalDate.of(1902, 1, 1),
+				LocalDate.of(1965, 12, 31)));
 
+		// Remove by lastname
+		authorDao.removeByLastName("Enquist");
+		authorDao.removeByLastName("Andersson");
 	}
 }

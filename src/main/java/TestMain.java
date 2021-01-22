@@ -10,7 +10,7 @@ public class TestMain {
 		EntityManagerFactory emf = Persistence
 				.createEntityManagerFactory("Author");
 
-				// Update author
+		// Update author
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		Author a = em.find(Author.class,5);
@@ -21,7 +21,7 @@ public class TestMain {
 		// Insert new author
 		em = emf.createEntityManager();
 		em.getTransaction().begin();
-		Author b = new Author(0,"Maja","Carlström", LocalDate.of(1988, 1, 12));
+		Author b = new Author("Maja","Carlström", LocalDate.of(1988, 1, 12));
 		em.persist(b);
 		System.out.println("Maja Id = " + a.getId());
 		em.getTransaction().commit();

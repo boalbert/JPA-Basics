@@ -10,6 +10,17 @@ public class AuthorDaoImpl implements AuthorDao {
 			.createEntityManagerFactory("Author");
 
 	@Override
+	public void create(Author author) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+
+		em.persist(author);
+
+		em.getTransaction().commit();
+		em.close();
+	}
+
+	@Override
 	public List<Author> findByLastName(String lastName) {
 
 		List<Author> list;
@@ -28,6 +39,21 @@ public class AuthorDaoImpl implements AuthorDao {
 		em.getTransaction().commit();
 		em.close();
 		return list;
+	}
+
+	public List<Author> findByBirthDate(LocalDate from, LocalDate to) {
+
+		List<Author> authors;
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+
+		authors = em.createQuery("FROM Author a where a.birthDate >= :from and a.birthDate <= :to", Author.class)
+				.setParameter("from", from)
+				.setParameter("to", to)
+				.getResultList();
+		em.getTransaction().commit();
+		em.close();
+		return authors;
 
 	}
 
@@ -49,17 +75,6 @@ public class AuthorDaoImpl implements AuthorDao {
 	}
 
 	@Override
-	public void create(Author a) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-
-		em.persist(a);
-
-		em.getTransaction().commit();
-		em.close();
-	}
-
-	@Override
 	public boolean remove(int id) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -77,19 +92,29 @@ public class AuthorDaoImpl implements AuthorDao {
 		return false;
 	}
 
-	public List<Author> findByBirthDate(LocalDate from, LocalDate to) {
+	@Override
+	public void removeByLastName(String lastName) {
 
-		List<Author> authors;
+		List<Author> list;
+
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 
-		authors = em.createQuery("FROM Author a where a.birthDate >= :from and a.birthDate <= :to", Author.class)
-				.setParameter("from", from)
-				.setParameter("to", to)
+		list = em.createQuery("FROM Author a WHERE a.lastName = : lastName", Author.class)
+				.setParameter("lastName", lastName)
 				.getResultList();
+
+		if (list.isEmpty()) {
+			System.out.println("No results for " + lastName);
+		} else {
+			for (Author author : list) {
+				em.remove(em.find(Author.class, author.getId()));
+			}
+		}
+		System.out.println("Removed " + list.size() + " objects. ");
+
 		em.getTransaction().commit();
 		em.close();
-		return authors;
 
 	}
 }
